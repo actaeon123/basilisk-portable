@@ -1,5 +1,5 @@
 //go:generate go install -v github.com/kevinburke/go-bindata/go-bindata
-//go:generate go-bindata -prefix res/ -pkg assets -o assets/assets.go res/Waterfox.lnk
+//go:generate go-bindata -prefix res/ -pkg assets -o assets/assets.go res/Basilisk.lnk
 //go:generate go install -v github.com/josephspurrier/goversioninfo/cmd/goversioninfo
 //go:generate goversioninfo -icon=res/papp.ico -manifest=res/papp.manifest
 package main
@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/Jeffail/gabs"
+	"github.com/actaeon123/basilisk-portable/assets"
 	"github.com/pkg/errors"
 	"github.com/portapps/portapps/v3"
 	"github.com/portapps/portapps/v3/pkg/log"
@@ -20,7 +21,6 @@ import (
 	"github.com/portapps/portapps/v3/pkg/shortcut"
 	"github.com/portapps/portapps/v3/pkg/utl"
 	"github.com/portapps/portapps/v3/pkg/win"
-	"github.com/portapps/waterfox-portable/assets"
 )
 
 type config struct {
@@ -45,7 +45,7 @@ func init() {
 	}
 
 	// Init app
-	if app, err = portapps.NewWithCfg("waterfox-portable", "Waterfox", cfg); err != nil {
+	if app, err = portapps.NewWithCfg("basilisk-portable", "Basilisk", cfg); err != nil {
 		log.Fatal().Err(err).Msg("Cannot initialize application. See log file for more info.")
 	}
 }
@@ -54,7 +54,7 @@ func main() {
 	utl.CreateFolder(app.DataPath)
 	profileFolder := utl.CreateFolder(app.DataPath, "profile", cfg.Profile)
 
-	app.Process = utl.PathJoin(app.AppPath, "waterfox.exe")
+	app.Process = utl.PathJoin(app.AppPath, "basilisk.exe")
 	app.Args = []string{
 		"--profile",
 		profileFolder,
@@ -94,7 +94,7 @@ func main() {
 	if cfg.Cleanup {
 		defer func() {
 			regKey := registry.Key{
-				Key:  `HKCU\SOFTWARE\Waterfox Ltd.`,
+				Key:  `HKCU\SOFTWARE\Basilisk`,
 				Arch: "32",
 			}
 			if regKey.Exists() {
@@ -103,8 +103,8 @@ func main() {
 				}
 			}
 			utl.Cleanup([]string{
-				path.Join(os.Getenv("APPDATA"), "Waterfox"),
-				path.Join(os.Getenv("LOCALAPPDATA"), "Waterfox"),
+				path.Join(os.Getenv("APPDATA"), "Basilisk-Dev"),
+				path.Join(os.Getenv("LOCALAPPDATA"), "Basilisk-Dev"),
 			})
 		}()
 	}
@@ -155,10 +155,10 @@ pref("browser.startup.homepage_override.mstone", "ignore");
 	}
 
 	// Copy default shortcut
-	shortcutPath := path.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Waterfox Portable.lnk")
-	defaultShortcut, err := assets.Asset("Waterfox.lnk")
+	shortcutPath := path.Join(os.Getenv("APPDATA"), "Microsoft", "Windows", "Start Menu", "Programs", "Basilisk Portable.lnk")
+	defaultShortcut, err := assets.Asset("Basilisk.lnk")
 	if err != nil {
-		log.Error().Err(err).Msg("Cannot load asset Waterfox.lnk")
+		log.Error().Err(err).Msg("Cannot load asset Basilisk.lnk")
 	}
 	err = os.WriteFile(shortcutPath, defaultShortcut, 0644)
 	if err != nil {
@@ -170,7 +170,7 @@ pref("browser.startup.homepage_override.mstone", "ignore");
 		ShortcutPath:     shortcutPath,
 		TargetPath:       app.Process,
 		Arguments:        shortcut.Property{Clear: true},
-		Description:      shortcut.Property{Value: "Waterfox Portable by Portapps"},
+		Description:      shortcut.Property{Value: "Basilisk Portable by Portapps-Act"},
 		IconLocation:     shortcut.Property{Value: app.Process},
 		WorkingDirectory: shortcut.Property{Value: app.AppPath},
 	})

@@ -1,4 +1,4 @@
-module github.com/portapps/waterfox-portable
+module github.com/actaeon123/basilisk-portable
 
 go 1.21
 
@@ -8,7 +8,7 @@ require (
 	github.com/pierrec/lz4/v3 v3.3.5
 	github.com/pkg/errors v0.9.1
 	github.com/portapps/portapps/v3 v3.10.0
-    github.com/actaeon123/basilisk-portable v0.24.511
+    github.com/actaeon123/basilisk-portable v0.24.512
 )
 
 require (

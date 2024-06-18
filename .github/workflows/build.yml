@@ -1,0 +1,12 @@
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+  build:
+    uses: portapps/.github/.github/workflows/app-build.yml@master

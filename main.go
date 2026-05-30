@@ -20,7 +20,7 @@ import (
 	"github.com/portapps/portapps/v3/pkg/shortcut"
 	"github.com/portapps/portapps/v3/pkg/utl"
 	"github.com/portapps/portapps/v3/pkg/win"
-	"github.com/portapps/basilisk-portable/assets"
+	"github.com/actaeon123/basilisk-portable/assets"
 )
 
 type config struct {

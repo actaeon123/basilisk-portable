@@ -1,4 +1,4 @@
-module github.com/portapps/waterfox-portable
+module github.com/actaeon123/basilisk-portable
 
 go 1.26.0
 

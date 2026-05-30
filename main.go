@@ -1,7 +1,6 @@
-//go:generate go install -v github.com/kevinburke/go-bindata/go-bindata
+//go:generate go install -v github.com/kevinburke/go-bindata/v4/go-bindata
 //go:generate go-bindata -prefix res/ -pkg assets -o assets/assets.go res/Basilisk.lnk
 //go:generate go install -v github.com/josephspurrier/goversioninfo/cmd/goversioninfo
-//go:generate goversioninfo -icon=res/papp.ico -manifest=res/papp.manifest
 package main
 
 import (
@@ -9,10 +8,10 @@ import (
 	"html/template"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/Jeffail/gabs"
-	"github.com/actaeon123/basilisk-portable/assets"
 	"github.com/pkg/errors"
 	"github.com/portapps/portapps/v3"
 	"github.com/portapps/portapps/v3/pkg/log"
@@ -21,6 +20,7 @@ import (
 	"github.com/portapps/portapps/v3/pkg/shortcut"
 	"github.com/portapps/portapps/v3/pkg/utl"
 	"github.com/portapps/portapps/v3/pkg/win"
+	"github.com/portapps/basilisk-portable/assets"
 )
 
 type config struct {
@@ -54,7 +54,7 @@ func main() {
 	utl.CreateFolder(app.DataPath)
 	profileFolder := utl.CreateFolder(app.DataPath, "profile", cfg.Profile)
 
-	app.Process = utl.PathJoin(app.AppPath, "basilisk.exe")
+	app.Process = filepath.Join(app.AppPath, "basilisk.exe")
 	app.Args = []string{
 		"--profile",
 		profileFolder,
@@ -122,7 +122,7 @@ func main() {
 
 	// Autoconfig
 	prefFolder := utl.CreateFolder(app.AppPath, "defaults/pref")
-	autoconfig := utl.PathJoin(prefFolder, "autoconfig.js")
+	autoconfig := filepath.Join(prefFolder, "autoconfig.js")
 	if err := utl.CreateFile(autoconfig, `//
 pref("general.config.filename", "portapps.cfg");
 pref("general.config.obscure_value", 0);`); err != nil {
@@ -130,7 +130,7 @@ pref("general.config.obscure_value", 0);`); err != nil {
 	}
 
 	// Mozilla cfg
-	mozillaCfgPath := utl.PathJoin(app.AppPath, "portapps.cfg")
+	mozillaCfgPath := filepath.Join(app.AppPath, "portapps.cfg")
 	mozillaCfgFile, err := os.Create(mozillaCfgPath)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Cannot create portapps.cfg")
@@ -188,8 +188,8 @@ pref("browser.startup.homepage_override.mstone", "ignore");
 }
 
 func createPolicies() error {
-	appFile := utl.PathJoin(utl.CreateFolder(app.AppPath, "distribution"), "policies.json")
-	dataFile := utl.PathJoin(app.DataPath, "policies.json")
+	appFile := filepath.Join(utl.CreateFolder(app.AppPath, "distribution"), "policies.json")
+	dataFile := filepath.Join(app.DataPath, "policies.json")
 	defaultPolicies := struct {
 		Policies map[string]interface{} `json:"policies"`
 	}{
